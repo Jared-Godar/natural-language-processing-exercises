@@ -105,3 +105,32 @@ def prep_article_data(df, column, extra_words=[], exclude_words=[]):
                exclude_words=exclude_words)
 
     return df[['label', column, 'clean', 'stemmed', 'lemmatized']]
+
+
+############
+
+def prep_news_data(df, column, extra_words=[], exclude_words=[]):
+    '''
+    This function take in a df, the name for a text column with the option to pass lists for extra_words and exclude_words and returns a df with the text article title, original text, stemmed text,lemmatized text, cleaned, tokenized, & lemmatized text with stopwords removed.
+    '''
+    df['clean'] = df[column].apply(basic_clean)\
+                            .apply(tokenize)\
+                            .apply(remove_stopwords,
+                                   extra_words=extra_words,
+                                   exclude_words=exclude_words)
+
+    df['stemmed'] = df[column].apply(basic_clean)\
+        .apply(tokenize)\
+        .apply(stem)\
+        .apply(remove_stopwords,
+               extra_words=extra_words,
+               exclude_words=exclude_words)
+
+    df['lemmatized'] = df[column].apply(basic_clean)\
+        .apply(tokenize)\
+        .apply(lemmatize)\
+        .apply(remove_stopwords,
+               extra_words=extra_words,
+               exclude_words=exclude_words)
+
+    return df[['category', column, 'clean', 'stemmed', 'lemmatized']]
